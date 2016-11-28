@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en" ng-app="phonecatApp">
+  <head>
+    <meta charset="utf-8">
+    <title>Dynamic data</title>
+    <!-- <link rel="stylesheet" href="node_/bootstrap/dist/css/bootstrap.css" /> -->
+    <script src="../node_modules/angular/angular.js"></script>
+    <script src="js/dynamic.js"></script>
+    </head>
+  <body ng-controller="PhoneListController">
+    <ul>
+      <li ng-repeat="phone in phones">
+        <span>{{phone.name}}</span>
+        <p>{{phone.snippet}}</p>
+      </li>
+    </ul>
+  </body>
+</html>

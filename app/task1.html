@@ -1,0 +1,14 @@
+<html ng-app="myapp">
+  <head>
+    <title>Hello angularJS</title>
+    <script src="../node_modules/angular/angular.js"></script>
+    <script src="js/task1/hello.js"></script>
+  </head>
+  <body>
+    <div ng-controller="HelloController">
+      Your name: <input ng-model="name" />
+      <button ng-click="update()">update</button>
+      <p>{{greeting}}</p>
+    </div>
+  </body>
+</html>
