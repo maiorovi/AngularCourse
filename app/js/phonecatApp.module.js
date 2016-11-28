@@ -1,1 +1,1 @@
-var phonecatApp = angualr.module('phonecatApp', ['phoneList'])
+angular.module('phonecatApp', [])
