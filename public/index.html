@@ -1,14 +1,16 @@
-<html ng-app="myapp">
+<html ng-app="notes">
   <head>
-    <title>Hello angularJS</title>
+    <title>Notes application</title>
+    <link rel="stylesheet" href="css/style.css" />
     <script src="angular.js"></script>
-    <script src="hello.js"></script>
+    <script src="notes.js"></script>
   </head>
-  <body>
-    <div ng-controller="HelloController">
-      Your name: <input ng-model="name" />
-      <button ng-click="update()">update</button>
-      <p>{{greeting}}</p>
+  <body ng-controller="NotesController">
+    <div ng-repeat="note in notes">
+      <p class="note">{{note.text}}</p>
     </div>
+
+    <textarea rows="10", cols="50" ng-model="text"></textarea>
+    <button ng-click="add()">Add note</button>
   </body>
 </html>

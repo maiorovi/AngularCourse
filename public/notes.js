@@ -1,10 +1,5 @@
 var notes = angular.module('notes', []);
 notes.controller('NotesController', function($scope, $http) {
-//   $scope.notes = [
-//  {text: "First note"},
-//  {text: "Second note"},
-//  {text: "Third note"}
-// ];
 
 var basicUrl = 'http://localhost:3000';
 var url = basicUrl + '/notes';
@@ -15,6 +10,13 @@ var update = function() {
     console.log(resp)
     $scope.notes = resp;
   })
+}
+
+$scope.add = function() {
+    $http.post(url, {text : $scope.text}).success(function(){
+      $scope.text = "";
+      update();
+    })
 }
 
   update()
