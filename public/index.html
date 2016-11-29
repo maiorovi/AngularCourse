@@ -7,10 +7,14 @@
   </head>
   <body ng-controller="NotesController">
     <div ng-repeat="note in notes">
-      <p class="note">{{note.text}}</p>
+      <p class="note">{{note.text}} <br/>
+        <button ng-click="top(note.id)">Send to top</button>
+        <button ng-click="remove(note.id)">Remove</button>
+      </p>
     </div>
 
     <textarea rows="10", cols="50" ng-model="text"></textarea>
     <button ng-click="add()">Add note</button>
+
   </body>
 </html>

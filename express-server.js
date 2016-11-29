@@ -22,7 +22,7 @@ app.get('/greeting', function(req, res) {
 
 app.get('/notes', function(req,res) {
   console.log('received request for: ' + req.originalUrl)
-  var response = req.session.notes || [{text: "First note"},{text: "Second note"},{text: "Third note"}];
+  var response = req.session.notes || [{id:0,text: "First note"},{id:1, text: "Second note"},{id:2, text: "Third note"}];
   res.append('Access-Control-Allow-Origin', '*')
   res.status(200).json(response);
 })
@@ -30,16 +30,48 @@ app.get('/notes', function(req,res) {
 app.post('/notes', function(req, res) {
   console.log('Request to add note' + req.body)
   if (!req.session.notes) {
-    req.session.notes = [{text: "First note"},{text: "Second note"},{text: "Third note"}];
-    req.session.last_note_id = 0;
+    req.session.notes = [{id:0,text: "First note"},{id:1, text: "Second note"},{id:2, text: "Third note"}];
+    req.session.last_note_id = 3;
   }
 
   var note = req.body;
-
-  note.id = req.session.last_node_id;
+  note.id = req.session.last_note_id;
   req.session.last_note_id++;
   req.session.notes.push(note);
-  
+
+  res.end();
+})
+
+app.delete('/notes', function(req, res) {
+  console.log('Drop note with id equal to ' + req.query.id);
+  var id = req.query.id;
+  var notes = req.session.notes|| [{id:0,text: "First note"},{id:1, text: "Second note"},{id:2, text: "Third note"}];
+  var updatedNotesList = [];
+  for (var i=0;i<notes.length;i++) {
+    if (notes[i].id != id) {
+      updatedNotesList.push(notes[i]);
+    }
+}
+req.session.notes = updatedNotesList;
+res.end();
+
+});
+
+app.post('/top', function(req, res) {
+  console.log(req.body);
+  console.log('Putting to top note with id : ' + req.body.id);
+  var id = req.body.id;
+  var notes = req.session.notes|| [{id:0,text: "First note"},{id:1, text: "Second note"},{id:2, text: "Third note"}];
+  var updatedNotesList = [];
+  for (var i = 0; i < notes.length; i++) {
+    if (notes[i].id != id) {
+      updatedNotesList.push(notes[i])
+    } else {
+      updatedNotesList.unshift(notes[i])
+    }
+  }
+
+  req.session.notes = updatedNotesList;
   res.end();
 })
 
