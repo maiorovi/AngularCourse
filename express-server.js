@@ -9,5 +9,12 @@ app.get('/greeting', function(req, res) {
   res.status(200).send('Hello '+ req.query.name +  '! I\'am server!' )
 })
 
+app.get('/notes', function(req,res) {
+  console.log('received request for: ' + req.originalUrl)
+  var response = [{text: "First note"},{text: "Second note"},{text: "Third note"}];
+  res.append('Access-Control-Allow-Origin', '*')
+  res.status(200).json(response);
+})
+
 
 app.listen(3000);
