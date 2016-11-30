@@ -6,6 +6,7 @@ var url = basicUrl + '/notes';
 var update = function() {
   $http.get(url).then(function(notes) {
     console.log(notes);
+    console.log($scope.sortBy);
     $scope.notes = notes.data;
   }, function(resp) {
     console.log(resp)
