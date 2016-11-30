@@ -1,12 +1,16 @@
-var notes = angular.module('notes', []);
+var notes = angular.module('notes', ['dndLists']);
 notes.controller('NotesController', function($scope, $http) {
 
 var basicUrl = 'http://localhost:3000';
 var url = basicUrl + '/notes';
 var update = function() {
-  $http.get(url).then(function(notes) {
+  if ($scope.activeSection == null && $scope.sections.length>0) {
+    $scope.activeSection = $scope.sections[0].title;
+  }
+  var params = {params: {section : $scope.activeSection}}
+  $http.get(url, params).then(function(notes) {
     console.log(notes);
-    console.log($scope.sortBy);
+
     $scope.notes = notes.data;
   }, function(resp) {
     console.log(resp)
@@ -15,7 +19,9 @@ var update = function() {
 }
 
 $scope.add = function() {
-    $http.post(url, {text : $scope.text}).success(function(){
+  if (!$scope.text || $scope.text.length==0) return;
+
+    $http.post(url, {text: $scope.text, section :$scope.activeSection }).success(function(){
       $scope.text = "";
       update();
     })
@@ -34,5 +40,42 @@ $scope.top = function(id) {
   });
 }
 
-  update()
+var readSections = function() {
+  $http.get('/sections').then(function(sections) {
+    console.log(sections);
+    $scope.sections = sections.data;
+    update();
+  }, function(err){
+    console.log(err)
+  })
+}
+
+$scope.showSection = function(section) {
+  $scope.activeSection = section.title;
+  update();
+}
+
+$scope.addSection = function() {
+  if ($scope.newSection.length==0) return;
+// check for duplicates
+  for (var i=0;i<$scope.sections.length;i++) {
+    if ($scope.sections[i].title==$scope.newSection) {
+      return;
+    }
+  }
+  var section = {title: $scope.newSection};
+  $scope.sections.unshift(section);
+  $scope.activeSection = $scope.newSection;
+  $scope.newSection = "";
+  $scope.writeSections();
+  update();
+}
+
+$scope.writeSections = function() {
+ if ($scope.sections && $scope.sections.length>0) {
+   $http.post("/sections/replace", $scope.sections);
+ }
+};
+
+  readSections();
 })

@@ -15,6 +15,11 @@ console.log("mongo db is opened!");
 db.collection('notes', function(error, notes) {
 db.notes = notes;
 });
+
+db.collection('sections', function(error, sections){
+  db.sections = sections;
+});
+
 });
 
 
@@ -28,6 +33,12 @@ app.use(session({
   saveUninitialized: true
 }));
 
+app.get('/sections', function(req, res) {
+  db.sections.find(req.query).toArray(function(err, items) {
+    res.send(items);
+  });
+});
+
 app.get('/greeting', function(req, res) {
   console.log('Received get /greeting with name' + req.query.name);
   res.status(200).send('Hello '+ req.query.name +  '! I\'am server!' )
@@ -35,6 +46,7 @@ app.get('/greeting', function(req, res) {
 
 app.get('/notes', function(req,res) {
   console.log('received request for: ' + req.originalUrl)
+  console.log('req.query = ' + req.query )
   // var response = req.session.notes || [{id:0,text: "First note"},{id:1, text: "Second note"},{id:2, text: "Third note"}];
   db.notes.find(req.query).sort({order:-1}).toArray(function(err, items) {
     res.status(200).json(items);
@@ -98,6 +110,20 @@ app.post('/top', function(req, res) {
 
 
   res.end();
+});
+
+app.post("/sections/replace", function(req,resp) {
+// do not clear the list
+if (req.body.length==0) {
+resp.end();
+}
+db.sections.remove({}, function(err, res) {
+if (err) console.log(err);
+db.sections.insert(req.body, function(err, res) {
+if (err) console.log("err after insert",err);
+resp.end();
+});
+});
 });
 
 app.listen(3000);
