@@ -7,8 +7,10 @@ module.config(
  when('/', {
  templateUrl: 'routes/notes/notes.html',
  controller: 'NotesController'
- }).
-otherwise({
+ }).when('/section/:name', {
+ templateUrl: 'routes/viewSection/viewSection.html',
+ controller: 'ViewSectionController'
+ }).otherwise({
   redirectTo: '/'
  }
  )
