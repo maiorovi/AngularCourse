@@ -1,0 +1,54 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-8">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Add your note to {{activeSection}}</h3>
+          </div>
+
+          <div class="panel-body">
+            <div class="form-group">
+                <textarea style="min-width:100%;min-height:200px" class="form-control" ng-model="text"></textarea>
+            </div>
+            <button ng-click="add()" class="btn btn-primary">Post note</button>
+          </div>
+        </div>
+
+        <div class="panel panel-default">
+          <div class="panel-heading">Notes</div>
+
+          <ul class="list-group" ng-repeat="note in notes">
+            <li class="list-group-item" >
+              <p>Published: {{note.date | date: 'HH:mm dd.MM.yyyy'}}</p>
+              {{note.text}}
+              <br/>
+              <br/>
+              <button ng-click="remove(note._id)" class="btn btn-primary">Remove</button>
+              <br \>
+              <br \>
+              <button ng-click="top(note._id)" class="btn btn-primary">Move to top</button>
+            </li>
+          </ul>
+        </div>
+
+   </div>
+
+   <div class="input-group" style="padding-bottom:20px">
+     <input type="text" class="form-control" placeholder="New section name" ng-model="newSection">
+     <span class="input-group-btn">
+       <button class="btn btn-default" ng-click="addSection()">Add</button>
+     </span>
+   </div>
+
+    <div class="col-md-4">
+        <!-- Sections -->
+        <ul class="list-group" dnd-list="sections">
+          <li href="#" class="list-group-item" dnd-draggable="section"
+           dnd-moved="sections.splice($index, 1); writeSections();"
+           ng-repeat="section in sections" ng-click="showSection(section)"
+           ng-class="{active: section.title==activeSection}">
+             {{section.title}}
+           </li>
+    </div>
+
+  </div>
