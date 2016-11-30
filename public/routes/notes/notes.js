@@ -1,11 +1,12 @@
 var notes = angular.module('notes');
-notes.controller('NotesController', function($scope, $http) {
+notes.controller('NotesController', function($scope, $http, $routeParams, $location) {
 
 var basicUrl = 'http://localhost:3000';
 var url = basicUrl + '/notes';
 var update = function() {
   if ($scope.activeSection == null && $scope.sections.length>0) {
-    $scope.activeSection = $scope.sections[0].title;
+    // $scope.activeSection = $scope.sections[0].title;
+    $scope.activeSection = $routeParams.section;
   }
   var params = {params: {section : $scope.activeSection}}
   $http.get(url, params).then(function(notes) {
@@ -51,6 +52,7 @@ var readSections = function() {
 }
 
 $scope.showSection = function(section) {
+  $location.path(section.title);
   $scope.activeSection = section.title;
   update();
 }

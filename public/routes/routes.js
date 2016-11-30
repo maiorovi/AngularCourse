@@ -4,7 +4,7 @@ var module = angular.module('notes', ['dndLists', 'ngRoute']);
 module.config(
  function($routeProvider) {
  $routeProvider.
- when('/', {
+ when('/:section?', {
  templateUrl: 'routes/notes/notes.html',
  controller: 'NotesController'
  }).when('/section/:name', {
