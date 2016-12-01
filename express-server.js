@@ -44,8 +44,13 @@ app.get('/sections', function(req, res) {
 });
 
 app.get('/checkUser', function(req, res) {
-  console.log(req.originalUrl)
-  res.send(req.query.user.length > 2);
+  console.log(req.query);
+  db.users.find({userName:req.query.user}).count().then(function(amt) {
+    console.log(amt);
+    res.send(amt == 0);
+  }, function(err) {
+    res.status(500).send(err);
+  })
 });
 
 app.get('/greeting', function(req, res) {
