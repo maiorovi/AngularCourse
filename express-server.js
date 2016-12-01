@@ -20,6 +20,10 @@ db.collection('sections', function(error, sections){
   db.sections = sections;
 });
 
+db.collection('users', function(error, users) {
+  db.users = users;
+});
+
 });
 
 
@@ -39,6 +43,11 @@ app.get('/sections', function(req, res) {
   });
 });
 
+app.get('/checkUser', function(req, res) {
+  console.log(req.originalUrl)
+  res.send(req.query.user.length > 2);
+});
+
 app.get('/greeting', function(req, res) {
   console.log('Received get /greeting with name' + req.query.name);
   res.status(200).send('Hello '+ req.query.name +  '! I\'am server!' )
@@ -53,6 +62,14 @@ app.get('/notes', function(req,res) {
   });
 
 })
+
+app.post('/users', function(req, res) {
+  console.log("inserting db record for user: " + JSON.stringify(req.body));
+  db.users.insert(req.body, function(resp) {
+    req.session.userName = req.body.userName;
+    res.end();
+  })
+});
 
 app.post('/notes', function(req, res) {
   console.log('Request to add note' + JSON.stringify(req.body));
