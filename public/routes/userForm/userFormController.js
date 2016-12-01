@@ -43,4 +43,21 @@ module.controller('UserFormController', function($scope, $http, $location) {
     })
   }
 }
+}).directive('verifyAge', function() {
+  return {
+    restrict: 'A',
+    require: 'ngModel',
+    scope: {
+      minAge : '=age'
+    },
+    link: function(scope, elem, attr, ngModel) {
+      ngModel.$validators.verifyAge = function(modelValue) {
+        return false;
+      }
+
+      scope.$watch('user.dateOfBirth', function() {
+        ngModel.$validate();
+      });
+    }
+  }
 })
